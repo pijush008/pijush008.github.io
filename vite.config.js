@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
 
 export default defineConfig({
-  base: '/pijush008.github.io/',
+  base: '/',
   server: {
     allowedHosts: ['.monkeycode-ai.live']
   },
