@@ -274,6 +274,7 @@ if (photoTilt && !window.matchMedia('(pointer: coarse)').matches) {
     const y = (e.clientY - rect.top) / rect.height - 0.5
     if (rafId) cancelAnimationFrame(rafId)
     rafId = requestAnimationFrame(() => {
+      frame.style.transition = 'transform 0.12s ease'
       frame.style.transform =
         'rotateY(' + x * 14 + 'deg) rotateX(' + -y * 14 + 'deg)'
     })
@@ -281,6 +282,7 @@ if (photoTilt && !window.matchMedia('(pointer: coarse)').matches) {
 
   photoTilt.addEventListener('mouseleave', () => {
     if (rafId) cancelAnimationFrame(rafId)
+    frame.style.transition = 'transform 0.7s cubic-bezier(0.16, 1, 0.3, 1)'
     frame.style.transform = 'rotateY(0deg) rotateX(0deg)'
   })
 }
