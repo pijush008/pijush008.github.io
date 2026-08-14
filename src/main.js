@@ -7,11 +7,7 @@ const prefersReducedMotion = window.matchMedia(
   '(prefers-reduced-motion: reduce)'
 ).matches
 
-if (prefersReducedMotion) {
-  canvasContainer.style.display = 'none'
-}
-
-const destroyScene = createScene(canvasContainer)
+const destroyScene = createScene(canvasContainer, prefersReducedMotion)
 
 window.addEventListener('beforeunload', () => {
   if (typeof destroyScene === 'function') destroyScene()

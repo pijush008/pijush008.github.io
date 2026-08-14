@@ -5,8 +5,8 @@ import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js'
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js'
 import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js'
 
-export function createScene(container) {
-  // Guard: if the container is hidden (e.g. prefers-reduced-motion), skip the scene.
+export function createScene(container, reducedMotion = false) {
+  // Guard: if the container is hidden, skip the scene.
   if (!container || container.clientWidth === 0 || container.clientHeight === 0) {
     return () => {}
   }
@@ -28,7 +28,8 @@ export function createScene(container) {
     powerPreference: 'high-performance'
   })
   renderer.setSize(container.clientWidth, container.clientHeight)
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+  const isSmall = container.clientWidth < 768
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, isSmall ? 1.25 : 1.75))
   renderer.toneMapping = THREE.ACESFilmicToneMapping
   renderer.toneMappingExposure = 1.15
   container.appendChild(renderer.domElement)
@@ -42,9 +43,9 @@ export function createScene(container) {
   composer.addPass(new RenderPass(scene, camera))
   const bloomPass = new UnrealBloomPass(
     new THREE.Vector2(container.clientWidth, container.clientHeight),
-    0.55,
-    0.55,
-    0.32
+    reducedMotion ? 0.25 : 0.38,
+    0.45,
+    0.35
   )
   composer.addPass(bloomPass)
   composer.addPass(new OutputPass())
@@ -136,7 +137,7 @@ export function createScene(container) {
     new THREE.BoxGeometry(0.18, 0.18, 0.18)
   ]
   const floaterColors = [0x8b6dff, 0x00d4ff, 0xff5c8a, 0xffb86b]
-  for (let i = 0; i < 30; i++) {
+  for (let i = 0; i < 18; i++) {
     const mat = new THREE.MeshStandardMaterial({
       color: floaterColors[i % floaterColors.length],
       metalness: 0.6,
@@ -270,9 +271,9 @@ export function createScene(container) {
     return new THREE.Points(geo, mat)
   }
 
-  const starsPurple = makeStars(1800, 0.06, 0x8b6dff)
-  const starsCyan = makeStars(1000, 0.045, 0x00d4ff)
-  const starsWhite = makeStars(700, 0.03, 0xffffff, 0.7)
+  const starsPurple = makeStars(900, 0.06, 0x8b6dff)
+  const starsCyan = makeStars(500, 0.045, 0x00d4ff)
+  const starsWhite = makeStars(350, 0.03, 0xffffff, 0.7)
   scene.add(starsPurple, starsCyan, starsWhite)
 
   /* ---- Lights ---- */
@@ -303,8 +304,9 @@ export function createScene(container) {
 
   let time = 0
 
+  let rafId = 0
   function animate() {
-    requestAnimationFrame(animate)
+    rafId = requestAnimationFrame(animate)
     time += 0.005
 
     mouse.x += (targetMouse.x - mouse.x) * 0.06
@@ -364,12 +366,28 @@ export function createScene(container) {
     const small = w < 700
     group.scale.setScalar(small ? 0.62 : 1)
     group.position.y = small ? 0.6 : 0
+
+    if (reducedMotion) composer.render()
   }
 
   window.addEventListener('resize', onResize)
   onResize()
 
-  animate()
+  if (reducedMotion) {
+    composer.render()
+  } else {
+    animate()
+  }
+
+  /* Pause the loop when the tab is hidden to save CPU/GPU */
+  document.addEventListener('visibilitychange', () => {
+    if (reducedMotion) return
+    if (document.hidden) {
+      cancelAnimationFrame(rafId)
+    } else {
+      animate()
+    }
+  })
 
   return () => {
     window.removeEventListener('resize', onResize)
