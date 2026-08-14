@@ -2354,3 +2354,181 @@ button {
     padding: 13px 26px;
   }
 }
+
+/* =========================================================
+   ENHANCEMENT PASS — depth, glass, aurora, 3D polish
+   ========================================================= */
+
+/* ---------- Ambient aurora (sits above canvas, below content) ---------- */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(42% 32% at 12% 16%, rgba(124, 92, 255, 0.20), transparent 60%),
+    radial-gradient(38% 30% at 88% 24%, rgba(0, 212, 255, 0.13), transparent 60%),
+    radial-gradient(48% 40% at 64% 94%, rgba(255, 92, 138, 0.11), transparent 62%);
+}
+
+/* ---------- Film grain (professional finish) ---------- */
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+}
+
+/* ---------- Hero ambient glow ---------- */
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 18%;
+  left: 4%;
+  width: min(560px, 52vw);
+  height: min(560px, 52vw);
+  background: radial-gradient(circle, rgba(124, 92, 255, 0.24), transparent 65%);
+  filter: blur(24px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ---------- Hero photo depth ---------- */
+.hero-photo .photo-frame {
+  box-shadow: 0 34px 90px rgba(124, 92, 255, 0.28), 0 0 70px rgba(0, 212, 255, 0.14);
+}
+
+/* ---------- Glowing glass 3D cubes ---------- */
+.cube3d span {
+  border: 1px solid rgba(162, 132, 255, 0.6);
+  background: linear-gradient(135deg, rgba(124, 92, 255, 0.22), rgba(0, 212, 255, 0.07));
+  box-shadow: inset 0 0 26px rgba(0, 212, 255, 0.22), 0 0 34px rgba(124, 92, 255, 0.12);
+}
+.cube-hero span {
+  background: linear-gradient(135deg, rgba(124, 92, 255, 0.30), rgba(255, 92, 138, 0.10));
+}
+
+/* ---------- Glass pill section tags ---------- */
+.section-tag {
+  display: inline-block;
+  padding: 8px 18px;
+  border-radius: 100px;
+  font-size: 0.72rem;
+  letter-spacing: 0.3em;
+  color: var(--text);
+  background: linear-gradient(135deg, rgba(124, 92, 255, 0.18), rgba(0, 212, 255, 0.10));
+  border: 1px solid rgba(124, 92, 255, 0.35);
+  backdrop-filter: blur(8px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 6px 22px rgba(124, 92, 255, 0.16);
+  margin-bottom: 22px;
+}
+
+/* ---------- Section title accent line ---------- */
+.section-title {
+  position: relative;
+}
+.section-title::after {
+  content: '';
+  display: block;
+  width: 66px;
+  height: 4px;
+  margin-top: 22px;
+  border-radius: 4px;
+  background: var(--gradient);
+  box-shadow: 0 0 18px rgba(124, 92, 255, 0.6);
+}
+
+/* ---------- Button depth & press ---------- */
+.btn {
+  position: relative;
+  overflow: hidden;
+  transform: translateZ(0);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.35);
+}
+.btn-primary {
+  box-shadow: 0 12px 30px rgba(124, 92, 255, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 46px rgba(124, 92, 255, 0.58), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+.btn-ghost:hover {
+  transform: translateY(-3px);
+}
+.btn:active {
+  transform: translateY(-1px) scale(0.98);
+}
+
+/* ---------- Unified card 3D glow on hover ---------- */
+.stack-card,
+.project-card,
+.service-card,
+.timeline-card,
+.contact-form,
+.contact-info,
+.featured-project,
+.slider {
+  transition: border-color 0.4s var(--ease), box-shadow 0.4s var(--ease), transform 0.4s var(--ease);
+}
+.stack-card:hover,
+.project-card:hover,
+.service-card:hover,
+.timeline-card:hover,
+.contact-form:hover,
+.contact-info:hover,
+.featured-project:hover,
+.slider:hover {
+  border-color: rgba(124, 92, 255, 0.5);
+  box-shadow:
+    0 32px 80px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(124, 92, 255, 0.28),
+    0 20px 54px rgba(124, 92, 255, 0.2),
+    0 0 64px rgba(0, 212, 255, 0.12);
+}
+
+/* ---------- Stats strip upgrade ---------- */
+.stats-strip {
+  background: linear-gradient(135deg, rgba(18, 18, 31, 0.72), rgba(20, 20, 36, 0.5));
+  border: 1px solid rgba(124, 92, 255, 0.2);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+.stat-num {
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ---------- Marquee edge fade ---------- */
+.marquee {
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+/* ---------- Footer accent line ---------- */
+.footer {
+  position: relative;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+.footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), var(--accent-2), transparent);
+  opacity: 0.5;
+}
+
+/* ---------- Respect reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .grain {
+    animation: none;
+  }
+}
