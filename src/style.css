@@ -588,8 +588,16 @@ button {
   box-shadow: 0 0 12px #2dff9b;
   animation: pulse 1.6s ease infinite;
 }
+.photo-rings {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
 .photo-rings .ring {
   position: absolute;
+  inset: 0;
+  margin: auto;
   border-radius: 50%;
   border: 1px solid rgba(124, 92, 255, 0.35);
   pointer-events: none;
@@ -2529,6 +2537,95 @@ body::after {
 /* ---------- Respect reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {
   .grain {
+    animation: none;
+  }
+}
+
+/* =========================================================
+   RESPONSIVE & READABILITY REFINEMENTS
+   ========================================================= */
+
+/* Slightly larger small labels for readability */
+.photo-chip small {
+  font-size: 0.78rem;
+}
+.featured-label {
+  font-size: 0.78rem;
+}
+.hero-kicker {
+  font-size: 0.85rem;
+}
+
+/* Menu-open scroll lock for the mobile drawer */
+body.menu-open {
+  overflow: hidden;
+}
+
+/* Defensive: never let grid/flex children blow out the viewport */
+.section,
+.hero-inner,
+.contact-grid,
+.about-grid,
+.stack-cards,
+.projects-grid,
+.services-grid,
+.featured-project,
+.timeline,
+.stats-strip,
+.slider,
+.contact-info,
+.contact-form,
+.featured-visual {
+  min-width: 0;
+}
+
+/* Fluid typography + tighter letter-spacing on small screens */
+@media (max-width: 480px) {
+  .hero-title {
+    font-size: clamp(2.4rem, 13vw, 3rem);
+  }
+  .section-title {
+    font-size: clamp(1.7rem, 9vw, 2.2rem);
+  }
+  .hero-roles {
+    font-size: clamp(1rem, 5.5vw, 1.2rem);
+  }
+  .hero-kicker {
+    letter-spacing: 0.18em;
+    font-size: 0.72rem;
+    margin-bottom: 18px;
+  }
+  .section-tag {
+    letter-spacing: 0.22em;
+    font-size: 0.68rem;
+  }
+  .photo-chip strong {
+    font-size: 0.85rem;
+  }
+  .photo-chip small {
+    font-size: 0.72rem;
+  }
+}
+
+/* Large desktop breathing room */
+@media (min-width: 1600px) {
+  .hero-inner {
+    gap: 80px;
+  }
+  .section {
+    padding: 140px 24px;
+  }
+}
+
+/* Stop decorative animation loops under reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .photo-rings .ring {
+    animation: none;
+  }
+  .marquee-track {
+    animation: none;
+  }
+  .loader-orbit {
     animation: none;
   }
 }

@@ -78,6 +78,7 @@ const navLinks = document.getElementById('navLinks')
 hamburger.addEventListener('click', () => {
   hamburger.classList.toggle('open')
   navLinks.classList.toggle('open')
+  document.body.classList.toggle('menu-open')
 })
 
 navLinks.querySelectorAll('a').forEach((link) => {
@@ -93,6 +94,7 @@ navLinks.querySelectorAll('a').forEach((link) => {
     }
     hamburger.classList.remove('open')
     navLinks.classList.remove('open')
+    document.body.classList.remove('menu-open')
   })
 })
 
@@ -149,8 +151,8 @@ const cursorGlow = document.getElementById('cursorGlow')
 
 if (!window.matchMedia('(pointer: coarse)').matches) {
   window.addEventListener('mousemove', (e) => {
-    cursorGlow.style.left = e.clientX + 'px'
-    cursorGlow.style.top = e.clientY + 'px'
+    cursorGlow.style.transform =
+      'translate3d(' + e.clientX + 'px, ' + e.clientY + 'px, 0) translate(-50%, -50%)'
     cursorGlow.classList.add('visible')
   })
   window.addEventListener('mouseleave', () => {

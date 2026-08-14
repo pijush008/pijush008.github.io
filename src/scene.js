@@ -360,6 +360,7 @@ export function createScene(container, reducedMotion = false) {
     const h = container.clientHeight
     camera.aspect = w / h
     camera.updateProjectionMatrix()
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, w < 768 ? 1.25 : 1.75))
     renderer.setSize(w, h)
     composer.setSize(w, h)
 
@@ -380,17 +381,19 @@ export function createScene(container, reducedMotion = false) {
   }
 
   /* Pause the loop when the tab is hidden to save CPU/GPU */
-  document.addEventListener('visibilitychange', () => {
+  const onVisibility = () => {
     if (reducedMotion) return
     if (document.hidden) {
       cancelAnimationFrame(rafId)
     } else {
       animate()
     }
-  })
+  }
+  document.addEventListener('visibilitychange', onVisibility)
 
   return () => {
     window.removeEventListener('resize', onResize)
+    document.removeEventListener('visibilitychange', onVisibility)
     scene.traverse((obj) => {
       if (obj.geometry) obj.geometry.dispose()
       if (obj.material) {
