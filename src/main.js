@@ -354,19 +354,46 @@ goTo(0)
 
 /* ---------- Contact form ---------- */
 const form = document.getElementById('contact-form')
-if (form) {
-  form.addEventListener('submit', (e) => {
-    e.preventDefault()
-    const btn = form.querySelector('button[type="submit"]')
-    btn.textContent = 'Sending...'
-    btn.disabled = true
-    setTimeout(() => {
-      btn.textContent = 'Send Message'
-      btn.disabled = false
-      form.reset()
-      const success = form.querySelector('.form-success')
-      success.classList.add('show')
-      setTimeout(() => success.classList.remove('show'), 4000)
-    }, 900)
-  })
-}
+const submitBtn = form.querySelector('button[type="submit"]');
+
+form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(form);
+    formData.append("access_key", "b2a201cc-5217-4caa-9417-ea8d0bfcdc90");
+
+    const originalText = submitBtn.textContent;
+
+    submitBtn.textContent = "Sending...";
+    submitBtn.disabled = true;
+
+    try {
+        const response = await fetch("https://api.web3forms.com/submit", {
+            method: "POST",
+            body: formData
+        });
+
+        const data = await response.json();
+        const success = form.querySelector('.form-success')
+
+        if (response.ok) {
+            success.textContent = "Message sent! I'll get back to you soon.";
+            success.classList.add('show');
+            setTimeout(() => success.classList.remove('show'), 4000);
+            form.reset();
+        } else {
+            success.textContent = "Error: " + data.message;
+            success.classList.add('show');
+            setTimeout(() => success.classList.remove('show'), 4000);
+        }
+
+    } catch (error) {
+        const success = form.querySelector('.form-success')
+        success.textContent = "Something went wrong. Please try again.";
+        success.classList.add('show');
+        setTimeout(() => success.classList.remove('show'), 4000);
+    } finally {
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+    }
+});
