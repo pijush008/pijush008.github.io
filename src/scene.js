@@ -722,6 +722,7 @@ export function createScene(container, reducedMotion = false) {
 
   let time = 0
   let rafId = 0
+  let reducedRafId = 0
 
   function animate() {
     rafId = requestAnimationFrame(animate)
@@ -774,17 +775,43 @@ export function createScene(container, reducedMotion = false) {
   onResize()
 
   if (reducedMotion) {
-    composer.render()
+    reducedRafId = setInterval(() => {
+      time += 0.04
+      planets.forEach((pl) => {
+        pl.angle += pl.data.speed * 4
+        pl.group.position.set(Math.cos(pl.angle) * pl.data.distance, 0, Math.sin(pl.angle) * pl.data.distance)
+        pl.tilt.rotation.y = time * pl.data.spin
+        if (pl.moonPivot) { pl.moonPivot.rotation.y = time * 6; pl.moonMesh.rotation.y = time * 2 }
+      })
+      stars.rotation.y = time * 0.004
+      starsBright.rotation.y = -time * 0.003
+      composer.render()
+    }, 200)
   } else {
     animate()
   }
 
   const onVisibility = () => {
-    if (reducedMotion) return
     if (document.hidden) {
       cancelAnimationFrame(rafId)
+      clearInterval(reducedRafId)
     } else {
-      animate()
+      if (reducedMotion) {
+        reducedRafId = setInterval(() => {
+          time += 0.04
+          planets.forEach((pl) => {
+            pl.angle += pl.data.speed * 4
+            pl.group.position.set(Math.cos(pl.angle) * pl.data.distance, 0, Math.sin(pl.angle) * pl.data.distance)
+            pl.tilt.rotation.y = time * pl.data.spin
+            if (pl.moonPivot) { pl.moonPivot.rotation.y = time * 6; pl.moonMesh.rotation.y = time * 2 }
+          })
+          stars.rotation.y = time * 0.004
+          starsBright.rotation.y = -time * 0.003
+          composer.render()
+        }, 200)
+      } else {
+        animate()
+      }
     }
   }
   document.addEventListener('visibilitychange', onVisibility)
