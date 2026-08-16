@@ -526,7 +526,7 @@ export function createScene(container, reducedMotion = false) {
   const sunRadius = 1.7
   const sunTex = genSun(); track(sunTex)
   const sun = new THREE.Mesh(
-    new THREE.SphereGeometry(sunRadius, 64, 64),
+    new THREE.SphereGeometry(sunRadius, 128, 128),
     new THREE.MeshBasicMaterial({ map: sunTex })
   )
   sceneGroup.add(sun)
