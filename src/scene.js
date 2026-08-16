@@ -91,12 +91,12 @@ function genSun() {
       const lat = (v - 0.5) * Math.PI
       const mu = Math.max(0, Math.cos(lat) * Math.abs(Math.cos(lon)))
       const limb = 0.12 + 0.88 * Math.pow(mu, 0.45)
-      const gran = fbm(u * 44, v * 44, 7, 4)
-      const gv = (gran - 0.5) * 0.85 + fbm(u * 9, v * 9, 2, 4)
+      const gran = fbm(Math.cos(lon) * 22 + Math.sin(lon) * 6, v * 44, 7, 4)
+      const gv = (gran - 0.5) * 0.85 + fbm(Math.cos(lon) * 9 + 5, v * 9, 2, 4)
       let r = (235 + gv * 150) * limb
       let g = (150 + gv * 150) * limb
       let b = (38 + gv * 70) * limb
-      const sp = fbm(u * 26, v * 26, 23, 4)
+      const sp = fbm(Math.cos(lon) * 26 + 10, v * 26, 23, 4)
       if (sp > 0.74) {
         const k = (sp - 0.74) / 0.26
         const pen = 1 - 0.35 * k
